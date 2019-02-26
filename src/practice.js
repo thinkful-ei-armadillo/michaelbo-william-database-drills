@@ -1,10 +1,11 @@
+/* eslint-disable strict */
 require('dotenv').config();
-const knex = require('knex')
+const knex = require('knex');
 
 const knexInstance = knex({
-client: 'pg',
-connection: process.env.DB_URL
-})
+  client: 'pg',
+  connection: process.env.DB_URL
+});
 
 console.log('connection successful');
 
@@ -13,12 +14,12 @@ const qry = knexInstance
   .from('amazong_products')
   .where({ name: 'Point of view gun' })
   .first()
-  .toQuery()
+  .toQuery();
 // .then(result => {
 //   console.log(result)
 // })
 
-console.log(qry)
+console.log(qry);
 
 // function searchByProduceName(searchTerm) {
 //     knexInstance
@@ -61,23 +62,23 @@ console.log(qry)
 // getProductsWithImages();
 
 function mostPopularVideosForDays(days) {
-    knexInstance
-        .select('video_name', 'region')
-        .count('date_viewed AS views')
-        .where(
-        'date_viewed',
-        '>',
-        knexInstance.raw(`now() - '?? days'::INTERVAL`, days)
-        )
-        .from('whopipe_video_views')
-        .groupBy('video_name', 'region')
-        .orderBy([
-        { column: 'region', order: 'ASC' },
-        { column: 'views', order: 'DESC' },
-        ])
-        .then(result => {
-        console.log(result)
-        })
-    }
+  knexInstance
+    .select('video_name', 'region')
+    .count('date_viewed AS views')
+    .where(
+      'date_viewed',
+      '>',
+      knexInstance.raw('now() - \'?? days\'::INTERVAL', days)
+    )
+    .from('whopipe_video_views')
+    .groupBy('video_name', 'region')
+    .orderBy([
+      { column: 'region', order: 'ASC' },
+      { column: 'views', order: 'DESC' },
+    ])
+    .then(result => {
+      console.log(result);
+    });
+}
     
-    mostPopularVideosForDays(30);
+mostPopularVideosForDays(30);
